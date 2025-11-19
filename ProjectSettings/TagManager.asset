@@ -44,5 +44,8 @@ TagManager:
   - name: Background
     uniqueID: 1541020551
     locked: 0
+  - name: colliders
+    uniqueID: 1273837881
+    locked: 0
   m_RenderingLayers:
   - Default
