@@ -44,6 +44,23 @@ public class TreeCuttingUI : MonoBehaviour
     private void removePlant()
     {
         Destroy(gameObject);
-        plantGO.transform.localPosition = new Vector3(plantGO.transform.localPosition.x + 10000, plantGO.transform.localPosition.y, -plantGO.transform.localPosition.z);
+
+        Rigidbody2D rb = plantGO.GetComponent<Rigidbody2D>();
+
+        rb.simulated = true;
+        rb.AddForceY(100.0f);
+
+        var whichDirection = Random.Range(-1.0f, 1.0f);
+        if (whichDirection < 0)
+        {
+            rb.AddForceX(50.0f);
+            rb.AddTorque(-50.0f);
+        }
+        else
+        {
+            rb.AddForceX(-50.0f);
+            rb.AddTorque(50.0f);
+        }
+        //plantGO.transform.localPosition = new Vector3(plantGO.transform.localPosition.x + 10000, plantGO.transform.localPosition.y, -plantGO.transform.localPosition.z);
     }
 }

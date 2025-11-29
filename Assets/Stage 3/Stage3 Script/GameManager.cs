@@ -2,6 +2,7 @@ using System.Collections;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManger : MonoBehaviour
 {
@@ -15,18 +16,24 @@ public class GameManger : MonoBehaviour
     public static GameObject cuttablePlant;
     [SerializeField] private GameObject UIPopUpGO = null;
     private static GameObject cuttingUIPrefabGO;
-    [SerializeField] public static bool autoRemove = true
-    ;
+    [SerializeField] public static bool autoRemove = true; 
+    
+    [SerializeField] private Text treeCountText;
+    private int totalTrees;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        totalTrees = plants.Length;
         AddPlants();
         SetCuttingUIPrefab(cuttingUIPrefab);
+        treeCountText.text = totalTrees.ToString();
     }
 
     // Update is called once per frame
     void Update()
     {
+
         canCut = false;
         cuttablePlant = null;
 
@@ -41,10 +48,9 @@ public class GameManger : MonoBehaviour
 
                 if(UIPopUpGO == null && !isCutting)
                 {
-                    Vector3 prefabPosition = new Vector3(playerTransform.localPosition.x, playerTransform.localPosition.y + 1, playerTransform.localPosition.z);
+                    Vector3 prefabPosition = new Vector3(plants[i].transform.localPosition.x, plants[i].transform.localPosition.y + 1, plants[i].transform.localPosition.z);
                     UIPopUpGO = Instantiate(UIPopUpPrefab, prefabPosition, Quaternion.identity);
                 }
-
             }
         }
 
@@ -62,6 +68,7 @@ public class GameManger : MonoBehaviour
             isCutting = false;
         }
     }
+
     static void SetCuttingUIPrefab(GameObject prefab)
     {
         cuttingUIPrefabGO = prefab; 
@@ -94,9 +101,14 @@ public class GameManger : MonoBehaviour
     public void StartCutting(Transform playerTransform)
     {
         Destroy(UIPopUpGO);
+
+        totalTrees--;
+        treeCountText.text = totalTrees.ToString();
+
         Vector3 prefabPosition = new Vector3(playerTransform.localPosition.x, playerTransform.localPosition.y + 1, playerTransform.localPosition.z);
         GameObject cuttingUI = Instantiate(cuttingUIPrefabGO, prefabPosition, quaternion.identity);
         cuttingUI.GetComponent<TreeCuttingUI>().setPlant(cuttablePlant);
+
 
     }
 }

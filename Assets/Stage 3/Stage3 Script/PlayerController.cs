@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
     private void Move(Vector2 direction)
     {
         Debug.Log("Move called");
-        if (CanMove(direction))
+        if (CanMove(direction) && !gameManger.isCutting)
         {
             transform.position += (Vector3)direction;
         }
@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
 
     private void Cut()
     {
-        if (GameManger.canCut)
+        if (GameManger.canCut && !gameManger.isCutting)
         {
             gameManger.isCutting = true;
             gameManger.StartCutting(transform);
