@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Tilemap groundTilemap;
     [SerializeField] private Tilemap collisionTilemap;
     [SerializeField] private GameManger gameManger;
+    private SpriteRenderer spriteRenderer;
+    [SerializeField] private Sprite[] playerSprites;
 
     private PlayerMovement controls;
 
@@ -30,7 +32,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-
+        spriteRenderer = GetComponent<SpriteRenderer>();
         controls.Main.Movement.performed += ctx => Move(ctx.ReadValue<Vector2>());
         controls.Main.Cut.performed += ctx => Cut();
         Debug.Log("Before Move call");
@@ -38,7 +40,27 @@ public class PlayerController : MonoBehaviour
 
     private void Move(Vector2 direction)
     {
-        Debug.Log("Move called");
+        Vector2 up = new Vector2(0, 1);
+        Vector2 down = new Vector2(0, -1);
+        Vector2 left = new Vector2(-1, 0);
+        Vector2 right = new Vector2(1, 0);
+        //Debug.Log("Move called");
+        if (direction == up)
+        {
+            spriteRenderer.sprite = playerSprites[0];
+        }
+        else if (direction == down)
+        {
+            spriteRenderer.sprite = playerSprites[1];
+        }
+        else if (direction == left)
+        {
+            spriteRenderer.sprite = playerSprites[2];
+        }
+        else if (direction == right)
+        {
+            spriteRenderer.sprite = playerSprites[3];
+        }
         if (CanMove(direction) && !gameManger.isCutting)
         {
             transform.position += (Vector3)direction;

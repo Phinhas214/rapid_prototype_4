@@ -39,6 +39,7 @@ public class TreeCuttingUI : MonoBehaviour
     public void setPlant(GameObject plant)
     {
         plantGO = plant;
+        plantGO.GetComponent<Plant>().isChopped = true;
     }
 
     private void removePlant()

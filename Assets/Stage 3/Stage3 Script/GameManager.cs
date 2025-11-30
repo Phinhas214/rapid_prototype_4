@@ -2,6 +2,7 @@ using System.Collections;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class GameManger : MonoBehaviour
@@ -18,12 +19,18 @@ public class GameManger : MonoBehaviour
     private static GameObject cuttingUIPrefabGO;
     [SerializeField] public static bool autoRemove = true; 
     
+    [SerializeField] private Text gameOverText;
     [SerializeField] private Text treeCountText;
     private int totalTrees;
     
+    AudioSource audioSource;
+
+    [SerializeField] private Tilemap collisionTilemap;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         totalTrees = plants.Length;
         AddPlants();
         SetCuttingUIPrefab(cuttingUIPrefab);
@@ -46,7 +53,7 @@ public class GameManger : MonoBehaviour
                 canCut = true;
                 cuttablePlant = plants[i];
 
-                if(UIPopUpGO == null && !isCutting)
+                if(UIPopUpGO == null && !isCutting && !plants[i].GetComponent<Plant>().isChopped)
                 {
                     Vector3 prefabPosition = new Vector3(plants[i].transform.localPosition.x, plants[i].transform.localPosition.y + 1, plants[i].transform.localPosition.z);
                     UIPopUpGO = Instantiate(UIPopUpPrefab, prefabPosition, Quaternion.identity);
@@ -100,15 +107,31 @@ public class GameManger : MonoBehaviour
 
     public void StartCutting(Transform playerTransform)
     {
+        Vector3Int CellPos = collisionTilemap.WorldToCell(cuttablePlant.transform.position);
+        RemoveCollisionTileAt(CellPos);
         Destroy(UIPopUpGO);
 
-        totalTrees--;
+        if (!cuttablePlant.GetComponent<Plant>().isChopped)
+        {
+            totalTrees--;
+        }
         treeCountText.text = totalTrees.ToString();
+        audioSource.Play();
 
         Vector3 prefabPosition = new Vector3(playerTransform.localPosition.x, playerTransform.localPosition.y + 1, playerTransform.localPosition.z);
+        
+
         GameObject cuttingUI = Instantiate(cuttingUIPrefabGO, prefabPosition, quaternion.identity);
         cuttingUI.GetComponent<TreeCuttingUI>().setPlant(cuttablePlant);
 
+        if (totalTrees <= 0)
+        {
+            gameOverText.gameObject.SetActive(true);
+        }
+    }
 
+    public void RemoveCollisionTileAt(Vector3Int cellPosition)
+    {
+        collisionTilemap.SetTile(cellPosition, null);
     }
 }

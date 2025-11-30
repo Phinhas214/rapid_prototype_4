@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Plant : MonoBehaviour
 {
+    public bool isChopped = false;
     [SerializeField] private Transform playerTransform;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
