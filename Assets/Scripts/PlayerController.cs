@@ -5,6 +5,9 @@ public class PlayerController : MonoBehaviour
     [Header("Rotation Settings")]
     [SerializeField] private float rotationSpeed = 90f; // degrees per second
     
+    [Header("Player Sprite")]
+    [SerializeField] private Sprite playerSprite; // Assign a player tile sprite here
+    
     [Header("Shooting Settings")]
     [SerializeField] private GameObject seedPrefab;
     [SerializeField] private float shootCooldown = 0.2f;
@@ -13,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private float currentRotation = 0f;
     private float lastShootTime = 0f;
     private Camera mainCamera;
+    private SpriteRenderer spriteRenderer;
     
     void Start()
     {
@@ -20,6 +24,19 @@ public class PlayerController : MonoBehaviour
         if (mainCamera == null)
         {
             mainCamera = FindFirstObjectByType<Camera>();
+        }
+        
+        // Get or add SpriteRenderer component
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+        }
+        
+        // Set the player sprite if assigned
+        if (playerSprite != null)
+        {
+            spriteRenderer.sprite = playerSprite;
         }
     }
     
