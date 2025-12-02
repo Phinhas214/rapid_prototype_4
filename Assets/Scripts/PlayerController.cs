@@ -13,10 +13,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float shootCooldown = 0.2f;
     [SerializeField] private float seedSpeed = 10f;
     
+    [Header("Shooting Resource Bar")]
+    [SerializeField] private float maxEnergy = 10f;
+    [SerializeField] private float energyRegenRate = 1f; // Energy per second
+    [SerializeField] private float singleShotCost = 1f;
+    [SerializeField] private float dualShotCost = 2f;
+    
     private float currentRotation = 0f;
     private float lastShootTime = 0f;
+    private float currentEnergy;
     private Camera mainCamera;
     private SpriteRenderer spriteRenderer;
+    private UIManager uiManager;
     
     void Start()
     {
@@ -38,12 +46,41 @@ public class PlayerController : MonoBehaviour
         {
             spriteRenderer.sprite = playerSprite;
         }
+        
+        // Initialize energy
+        currentEnergy = maxEnergy;
+        
+        // Find UIManager for energy bar updates
+        uiManager = FindFirstObjectByType<UIManager>();
+        if (uiManager != null)
+        {
+            uiManager.UpdateEnergyBar(currentEnergy / maxEnergy);
+        }
     }
     
     void Update()
     {
         HandleRotation();
         HandleShooting();
+        RegenerateEnergy();
+    }
+    
+    void RegenerateEnergy()
+    {
+        if (currentEnergy < maxEnergy)
+        {
+            currentEnergy += energyRegenRate * Time.deltaTime;
+            if (currentEnergy > maxEnergy)
+            {
+                currentEnergy = maxEnergy;
+            }
+            
+            // Update UI
+            if (uiManager != null)
+            {
+                uiManager.UpdateEnergyBar(currentEnergy / maxEnergy);
+            }
+        }
     }
     
     void HandleRotation()
@@ -73,36 +110,64 @@ public class PlayerController : MonoBehaviour
         
         bool shootLeft = false;
         bool shootRight = false;
+        float energyCost = 0f;
         
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            // Shoot in both directions
-            shootLeft = true;
-            shootRight = true;
+            // Shoot in both directions - costs 2 energy
+            if (currentEnergy >= dualShotCost)
+            {
+                shootLeft = true;
+                shootRight = true;
+                energyCost = dualShotCost;
+            }
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
-            // Shoot only left
-            shootLeft = true;
+            // Shoot only left - costs 1 energy
+            if (currentEnergy >= singleShotCost)
+            {
+                shootLeft = true;
+                energyCost = singleShotCost;
+            }
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
-            // Shoot only right
-            shootRight = true;
+            // Shoot only right - costs 1 energy
+            if (currentEnergy >= singleShotCost)
+            {
+                shootRight = true;
+                energyCost = singleShotCost;
+            }
         }
         
-        if (shootLeft)
+        // Only shoot if we have enough energy
+        if (energyCost > 0f)
         {
-            ShootSeed(-180f); // Left direction (180 degrees from current rotation)
-        }
-        
-        if (shootRight)
-        {
-            ShootSeed(0f); // Right direction (same as current rotation)
-        }
-        
-        if (shootLeft || shootRight)
-        {
+            // Consume energy
+            currentEnergy -= energyCost;
+            if (currentEnergy < 0f)
+            {
+                currentEnergy = 0f;
+            }
+            
+            // Update UI
+            if (uiManager != null)
+            {
+                uiManager.UpdateEnergyBar(currentEnergy / maxEnergy);
+            }
+            
+            // Perform shooting
+            if (shootLeft)
+            {
+                ShootSeed(-180f); // Left direction (180 degrees from current rotation)
+            }
+            
+            if (shootRight)
+            {
+                ShootSeed(0f); // Right direction (same as current rotation)
+            }
+            
             lastShootTime = Time.time;
         }
     }
