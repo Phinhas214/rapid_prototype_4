@@ -19,12 +19,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float singleShotCost = 1f;
     [SerializeField] private float dualShotCost = 2f;
     
+    [Header("Audio")]
+    [SerializeField] private AudioClip shootSound;
+    [SerializeField] private float shootSoundVolume = 0.8f;
+    
     private float currentRotation = 0f;
     private float lastShootTime = 0f;
     private float currentEnergy;
     private Camera mainCamera;
     private SpriteRenderer spriteRenderer;
     private UIManager uiManager;
+    private AudioSource audioSource;
     
     void Start()
     {
@@ -55,6 +60,14 @@ public class PlayerController : MonoBehaviour
         if (uiManager != null)
         {
             uiManager.UpdateEnergyBar(currentEnergy / maxEnergy);
+        }
+
+        // Get or add AudioSource component for shooting sound
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
         }
     }
     
@@ -168,7 +181,18 @@ public class PlayerController : MonoBehaviour
                 ShootSeed(0f); // Right direction (same as current rotation)
             }
             
+            // Play shooting sound
+            PlayShootSound();
+            
             lastShootTime = Time.time;
+        }
+    }
+    
+    void PlayShootSound()
+    {
+        if (shootSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(shootSound, shootSoundVolume);
         }
     }
     

@@ -8,7 +8,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject targetPrefab;
     
     [Header("Target Spawning")]
-    [SerializeField] private float spawnInterval = 2f;
+    [SerializeField] private float spawnInterval = 2f; // Kept for backward compatibility / default
+    [SerializeField] private float initialSpawnInterval = 2f; // Interval at start of game
+    [SerializeField] private float finalSpawnInterval = 0.5f; // Interval near end of game (faster spawning)
     [SerializeField] private float spawnXMin = -8f;
     [SerializeField] private float spawnXMax = 8f;
     [SerializeField] private float spawnY = 6f;
@@ -80,8 +82,16 @@ public class GameManager : MonoBehaviour
                 
                 Instantiate(targetPrefab, spawnPosition, Quaternion.identity);
             }
-            
-            yield return new WaitForSeconds(spawnInterval);
+
+            // Calculate current spawn interval based on how much time has passed
+            // 0 at start, 1 at end
+            float elapsed = gameDuration - currentTime;
+            float t = gameDuration > 0f ? Mathf.Clamp01(elapsed / gameDuration) : 1f;
+
+            // Linearly interpolate between initial and final interval
+            float currentInterval = Mathf.Lerp(initialSpawnInterval, finalSpawnInterval, t);
+
+            yield return new WaitForSeconds(currentInterval);
         }
     }
     

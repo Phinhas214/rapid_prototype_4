@@ -617,6 +617,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1184849736}
   - component: {fileID: 1184849735}
+  - component: {fileID: 1184849737}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -639,6 +640,8 @@ MonoBehaviour:
   gameDuration: 60
   targetPrefab: {fileID: 4678650664571916021, guid: 218da0b4332e028478e93798dab09d2e, type: 3}
   spawnInterval: 2
+  initialSpawnInterval: 2
+  finalSpawnInterval: 0.5
   spawnXMin: -8
   spawnXMax: 8
   spawnY: 6
@@ -657,6 +660,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1184849737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1184849734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5b9a19f3ec05e24f8c6893c3d3af585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundMusic: {fileID: 8300000, guid: 2d41f0a660055ba46ae257927405c060, type: 3}
+  musicVolume: 0.1
+  playOnStart: 1
+  loop: 1
 --- !u!1 &1248475416
 GameObject:
   m_ObjectHideFlags: 0
@@ -1286,6 +1305,8 @@ MonoBehaviour:
   energyRegenRate: 1
   singleShotCost: 1
   dualShotCost: 2
+  shootSound: {fileID: 8300000, guid: 0c3168fe874a5484b9682bc271ee5aba, type: 3}
+  shootSoundVolume: 0.8
 --- !u!58 &1912897501
 CircleCollider2D:
   m_ObjectHideFlags: 0
