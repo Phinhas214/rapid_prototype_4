@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Threading;
 
 public class WateringTimer : MonoBehaviour
 {
@@ -48,6 +49,10 @@ public class WateringTimer : MonoBehaviour
                 timerRunning = false;
                 playerController.canWater = false;
             }
+        }
+        else if (timeRemaining <= 0f)
+        {
+            Time.timeScale = 0f;
         }
     }
 }

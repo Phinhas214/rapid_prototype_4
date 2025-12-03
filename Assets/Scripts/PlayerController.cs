@@ -6,7 +6,7 @@ using TMPro; // Needed for score UI
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Tilemap groundTilemap;
-    [SerializeField] private Tilemap collisionTilemap;
+    // [SerializeField] private Tilemap collisionTilemap;
 
     public bool canWater = true;
 
@@ -56,8 +56,7 @@ public class PlayerController : MonoBehaviour
         Vector3Int gridPosition =
             groundTilemap.WorldToCell(transform.position + (Vector3)direction);
 
-        if (!groundTilemap.HasTile(gridPosition) ||
-            collisionTilemap.HasTile(gridPosition))
+        if (!groundTilemap.HasTile(gridPosition))
         {
             return false;
         }
