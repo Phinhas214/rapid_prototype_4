@@ -16,12 +16,12 @@ public class Stage3PlayerController : MonoBehaviour
     [Header("Instruction UI")]
     [SerializeField] private GameObject instructionText; // Assign in inspector, or will be found by name
 
-    private PlayerMovement controls;
+    private PlayerMovementStage3 controls;
     private bool hasMadeFirstMove = false;
 
     private void Awake()
     {
-        controls = new PlayerMovement();
+        controls = new PlayerMovementStage3();
     }
 
     private void OnEnable()

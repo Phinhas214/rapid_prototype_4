@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "name": "PlayerMovement",
+    "name": "PlayerMovementStage3",
     "maps": [
         {
             "name": "Main",
