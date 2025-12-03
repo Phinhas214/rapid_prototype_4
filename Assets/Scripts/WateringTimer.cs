@@ -16,10 +16,20 @@ public class WateringTimer : MonoBehaviour
         instructionText.gameObject.SetActive(true); // Show instructions at start
     }
 
+    bool startTimeCondition()
+    {
+        return Input.GetKeyDown(KeyCode.Space) ||
+                Input.GetKeyDown(KeyCode.W) ||
+                Input.GetKeyDown(KeyCode.A) || 
+                Input.GetKeyDown(KeyCode.S) || 
+                Input.GetKeyDown(KeyCode.D) &&
+                !timerRunning && playerController.canWater;
+    }
+
     void Update()
     {
         // First Space press starts timer AND hides instructions
-        if (Input.GetKeyDown(KeyCode.Space) && !timerRunning && playerController.canWater)
+        if (startTimeCondition() == true)
         {
             timerRunning = true;
             instructionText.gameObject.SetActive(false);
