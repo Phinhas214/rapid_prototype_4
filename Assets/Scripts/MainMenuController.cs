@@ -6,6 +6,8 @@ public class MainMenuController : MonoBehaviour
 {
     [Header("Scene Settings")]
     [SerializeField] private string gameSceneName = "Stage-1";
+    private string scene2Name = "Stage_2";
+    private string scene3Name = "Stage 3";
     
     [Header("Audio")]
     [SerializeField] private AudioClip buttonClickSound;
@@ -82,16 +84,34 @@ public class MainMenuController : MonoBehaviour
         // Wait for sound to play
         yield return new WaitForSeconds(soundDelay);
         
-        // Load the game scene
-        if (!string.IsNullOrEmpty(gameSceneName))
+        if(SceneManager.GetActiveScene().name == "MainMenu")
         {
-            SceneManager.LoadScene(gameSceneName);
+            // Load the game scene
+            if (!string.IsNullOrEmpty(gameSceneName))
+            {
+                SceneManager.LoadScene(gameSceneName);
+                yield break;
+            }
+            else
+            {
+                Debug.LogWarning("Game scene name not set in MainMenuController!");
+                isProcessing = false; // Reset if scene name is invalid
+            }
         }
-        else
+        else if(SceneManager.GetActiveScene().name == "Stage-1")
         {
-            Debug.LogWarning("Game scene name not set in MainMenuController!");
-            isProcessing = false; // Reset if scene name is invalid
+            // If currently in Stage 1 menu, load Stage 2 scene
+            SceneManager.LoadScene(scene2Name);
+            yield break;
         }
+        else if(SceneManager.GetActiveScene().name == "Stage_2")
+        {
+            // If currently in Stage 2 menu, load Stage 3 scene
+            SceneManager.LoadScene(scene3Name);
+            yield break;
+        }
+
+        
     }
     
     IEnumerator QuitGame()
