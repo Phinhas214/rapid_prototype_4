@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SaplingGrow : MonoBehaviour
 {
-    public float requiredHoldTime = 2f; 
+    public float requiredHoldTime = 0.1f; 
     private float holdTimer = 0f;
     private bool playerNearby = false;
 
@@ -27,8 +27,8 @@ public class SaplingGrow : MonoBehaviour
         // Already grown? Then do nothing.
         if (hasGrown)
             return;
-
-        if (playerNearby && Input.GetKey(KeyCode.Space))
+        playerNearby = Vector2.Distance(player.position, transform.position) < 1.2f;
+        if (playerNearby && playerController.canWater && Input.GetKey(KeyCode.Space))
         {
             holdTimer += Time.deltaTime;
 
