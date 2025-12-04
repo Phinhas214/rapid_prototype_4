@@ -9,6 +9,7 @@ public class PlantSpawner : MonoBehaviour
     [SerializeField] private Transform plantsParent; // Parent GameObject for plants
     [SerializeField] private Tilemap groundTilemap; // The tilemap to check for valid spawn positions
     [SerializeField] private Tilemap collisionTilemap; // Collision tilemap to avoid
+    [SerializeField] private Tile collisionTile; // Tile to place in collision tilemap
     
     [Header("Spawn Area")]
     [SerializeField] private int minX = -10;
@@ -139,6 +140,7 @@ public class PlantSpawner : MonoBehaviour
             
             // Convert grid position to world position
             Vector3 worldPos = groundTilemap.CellToWorld(gridPos);
+            Vector3 actualWorldPos = worldPos + groundTilemap.tileAnchor; // Adjust for tile anchor
             worldPos.z = 0; // Ensure Z is 0 for 2D
             
             // Check minimum distance from other plants
@@ -158,7 +160,8 @@ public class PlantSpawner : MonoBehaviour
             }
             
             // Spawn plant at this position
-            GameObject plant = Instantiate(plantPrefab, worldPos, Quaternion.identity, plantsParent);
+            GameObject plant = Instantiate(plantPrefab, actualWorldPos, Quaternion.identity, plantsParent);
+            AddCollisionTileAt(gridPos); // Add collision tile at this position
             spawnedPositions.Add(worldPos);
             plants.Add(plant);
             i++;
@@ -197,6 +200,11 @@ public class PlantSpawner : MonoBehaviour
     public GameObject[] GetSpawnedPlants()
     {
         return spawnedPlants;
+    }
+
+    public void AddCollisionTileAt(Vector3Int cellPosition)
+    {
+        collisionTilemap.SetTile(cellPosition, collisionTile);
     }
 }
 

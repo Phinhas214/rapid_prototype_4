@@ -7916,10 +7916,10 @@ MonoBehaviour:
   saplingPrefab: {fileID: 3465503960906825662, guid: ae0cf6b65abb3cf45abd2d7126856db0, type: 3}
   saplingsParent: {fileID: 642586854}
   groundTilemap: {fileID: 1829607542}
-  minX: -20
-  maxX: 20
-  minY: -20
-  maxY: 20
+  minX: -11
+  maxX: 11
+  minY: -10
+  maxY: 10
   minDistanceBetweenSaplings: 2.5
 --- !u!4 &1214784578
 Transform:
