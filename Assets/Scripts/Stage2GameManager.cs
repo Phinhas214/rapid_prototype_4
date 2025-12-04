@@ -16,10 +16,16 @@ public class Stage2GameManager : MonoBehaviour
     [Header("Scene Settings")]
     [SerializeField] private string nextSceneName = "Stage 3";
     
+    [Header("Audio")]
+    [SerializeField] private BackgroundMusicPlayer backgroundMusicPlayer;
+    [SerializeField] private AudioClip stage2BackgroundMusic;
+    [SerializeField] private float bgmVolume = 0.5f;
+    
     private PlayerController playerController;
     private bool gameWon = false;
     private bool gameLost = false;
     private bool gameActive = true;
+    private AudioSource musicSource;
     
     void Start()
     {
@@ -32,6 +38,9 @@ public class Stage2GameManager : MonoBehaviour
             totalSaplingsNeeded = 5;
             Debug.LogWarning("Stage 1 score is 0. Defaulting to 5 saplings needed.");
         }
+        
+        // Setup background music
+        SetupBackgroundMusic();
         
         // Find PlayerController
         playerController = FindFirstObjectByType<PlayerController>();
@@ -61,6 +70,46 @@ public class Stage2GameManager : MonoBehaviour
         Debug.Log($"Stage 2: Need to grow {totalSaplingsNeeded} trees.");
     }
     
+    void SetupBackgroundMusic()
+    {
+        // Try to find BackgroundMusicPlayer if not assigned
+        if (backgroundMusicPlayer == null)
+        {
+            backgroundMusicPlayer = FindFirstObjectByType<BackgroundMusicPlayer>();
+        }
+        
+        // If BackgroundMusicPlayer exists, use it
+        if (backgroundMusicPlayer != null)
+        {
+            if (stage2BackgroundMusic != null)
+            {
+                backgroundMusicPlayer.SetVolume(bgmVolume);
+                // Note: BackgroundMusicPlayer might need a method to change clip
+                // For now, we'll create our own AudioSource if needed
+            }
+        }
+        
+        // Create our own AudioSource for background music if BackgroundMusicPlayer doesn't exist or doesn't support changing clips
+        if (musicSource == null)
+        {
+            musicSource = gameObject.AddComponent<AudioSource>();
+            musicSource.playOnAwake = false;
+            musicSource.loop = true;
+            musicSource.volume = bgmVolume;
+        }
+        
+        // Play background music if assigned
+        if (stage2BackgroundMusic != null && musicSource != null)
+        {
+            musicSource.clip = stage2BackgroundMusic;
+            musicSource.Play();
+        }
+        else if (stage2BackgroundMusic == null)
+        {
+            Debug.LogWarning("Stage2GameManager: Stage 2 background music not assigned! Please assign 'Stage2BackgroundMusic' in the Unity Inspector.");
+        }
+    }
+    
     void Update()
     {
         if (!gameActive || gameWon || gameLost)
@@ -80,6 +129,9 @@ public class Stage2GameManager : MonoBehaviour
         
         gameWon = true;
         gameActive = false;
+        
+        // Stop background music
+        StopBackgroundMusic();
         
         // Save trees watered count for Stage 3
         if (playerController != null)
@@ -107,6 +159,9 @@ public class Stage2GameManager : MonoBehaviour
         gameLost = true;
         gameActive = false;
         
+        // Stop background music
+        StopBackgroundMusic();
+        
         // Save trees watered count for Stage 3 (even if not all were grown)
         if (playerController != null)
         {
@@ -123,6 +178,21 @@ public class Stage2GameManager : MonoBehaviour
         ShowGameOverPanel("YOU ALMOST GOT IT!");
         
         Debug.Log($"Stage 2: Time ran out! Trees grown: {playerController.treeCount} / {totalSaplingsNeeded}");
+    }
+    
+    void StopBackgroundMusic()
+    {
+        // Stop BackgroundMusicPlayer if it exists
+        if (backgroundMusicPlayer != null && backgroundMusicPlayer.IsPlaying())
+        {
+            backgroundMusicPlayer.StopMusic();
+        }
+        
+        // Stop our own AudioSource
+        if (musicSource != null && musicSource.isPlaying)
+        {
+            musicSource.Stop();
+        }
     }
     
     void ShowGameOverPanel(string message = "ALL TREES GROWN!")

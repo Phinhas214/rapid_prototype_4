@@ -141,3 +141,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaplingGrow
   requiredHoldTime: 2
+  wateringSound: {fileID: 8300000, guid: 8bd644f0f9f119b439516cdfb36f73a7, type: 3}
+  wateringSoundVolume: 0.8

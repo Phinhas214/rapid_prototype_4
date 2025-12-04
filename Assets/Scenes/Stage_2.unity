@@ -13982,6 +13982,9 @@ MonoBehaviour:
   treesGrownText: {fileID: 2095498141}
   nextStageButton: {fileID: 788488623}
   nextSceneName: Stage 3
+  backgroundMusicPlayer: {fileID: 0}
+  stage2BackgroundMusic: {fileID: 8300000, guid: 03f8662cc99f8624ab6e23c11658822c, type: 3}
+  bgmVolume: 0.1
 --- !u!1 &2021985399
 GameObject:
   m_ObjectHideFlags: 0
