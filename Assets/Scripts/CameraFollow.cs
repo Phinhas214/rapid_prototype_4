@@ -7,9 +7,10 @@ public class CameraFollow : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
     [SerializeField] [Range(0.1f, 1f)] private float smoothSpeed = 0.125f;
 
-    private void LateUpdate()
+    private void Update()
     {
         Vector3 desiredPosition = target.position + offset;
+        desiredPosition.z = -10;
         transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, smoothSpeed);
     }
 }
