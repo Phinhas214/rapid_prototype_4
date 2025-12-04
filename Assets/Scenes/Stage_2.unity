@@ -7916,10 +7916,10 @@ MonoBehaviour:
   saplingPrefab: {fileID: 3465503960906825662, guid: ae0cf6b65abb3cf45abd2d7126856db0, type: 3}
   saplingsParent: {fileID: 642586854}
   groundTilemap: {fileID: 1829607542}
-  minX: -10
-  maxX: 10
-  minY: -10
-  maxY: 10
+  minX: -20
+  maxX: 20
+  minY: -20
+  maxY: 20
   minDistanceBetweenSaplings: 2.5
 --- !u!4 &1214784578
 Transform:
@@ -7965,7 +7965,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 100616ff93dee144688180424fb86a60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WateringTimer
-  timeRemaining: 90
+  timeRemaining: 60
   timerText: {fileID: 1833281480}
   playerController: {fileID: 818613904}
 --- !u!4 &1763660706
@@ -13852,7 +13852,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 90
+  m_text: 60
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
