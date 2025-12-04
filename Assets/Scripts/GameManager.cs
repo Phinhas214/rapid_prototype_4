@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     private bool gameActive = false;
     private Camera mainCamera;
     private UIManager uiManager;
+
+
     
     void Start()
     {
@@ -101,6 +103,7 @@ public class GameManager : MonoBehaviour
             return;
         
         score += points;
+        MainMenuController.totalScore += points;
         
         if (uiManager != null)
         {

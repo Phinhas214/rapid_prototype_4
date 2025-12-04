@@ -52,7 +52,7 @@ public class WateringTimer : MonoBehaviour
         }
         else if (timeRemaining <= 0f)
         {
-            Time.timeScale = 0f;
+            //Time.timeScale = 0f;
         }
     }
 }

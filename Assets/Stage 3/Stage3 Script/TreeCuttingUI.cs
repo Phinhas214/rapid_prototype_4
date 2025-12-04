@@ -44,8 +44,6 @@ public class TreeCuttingUI : MonoBehaviour
 
     private void removePlant()
     {
-        Destroy(gameObject);
-
         Rigidbody2D rb = plantGO.GetComponent<Rigidbody2D>();
 
         rb.simulated = true;
@@ -62,6 +60,7 @@ public class TreeCuttingUI : MonoBehaviour
             rb.AddForceX(-50.0f);
             rb.AddTorque(50.0f);
         }
+        Destroy(gameObject);
         //plantGO.transform.localPosition = new Vector3(plantGO.transform.localPosition.x + 10000, plantGO.transform.localPosition.y, -plantGO.transform.localPosition.z);
     }
 }
