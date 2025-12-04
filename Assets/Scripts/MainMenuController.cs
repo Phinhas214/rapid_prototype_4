@@ -24,6 +24,7 @@ public class MainMenuController : MonoBehaviour
     public static int totalScore = 0; // Static variable to hold total score across scenes
     public static int stage1Score = 0; // Static variable to hold Stage 1 score (number of targets hit)
     public static int stage2TreesWatered = 0; // Static variable to hold Stage 2 trees watered count
+    public static int stage3TreesCut = 0; // Static variable to hold Stage 3 trees cut count
     
     void Start()
     {

@@ -9168,10 +9168,10 @@ MonoBehaviour:
   groundTilemap: {fileID: 340589306}
   collisionTilemap: {fileID: 1079905762}
   collisionTile: {fileID: 11400000, guid: 746644b196d26421583057f2654e61a6, type: 2}
-  minX: -11
-  maxX: 11
-  minY: -10
-  maxY: 10
+  minX: -12
+  maxX: 13
+  minY: -7
+  maxY: 8
   minDistanceBetweenPlants: 1.5
 --- !u!4 &1391837731
 Transform:

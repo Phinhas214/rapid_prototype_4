@@ -2,6 +2,7 @@ using System.Collections;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using TMPro;
@@ -26,6 +27,7 @@ public class GameManger : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerTextTMP; // TextMeshPro component (alternative)
     [SerializeField] private Text finalScoreText;
     private int totalTrees;
+    private int treesCut = 0; // Track number of trees cut
     
     AudioSource audioSource;
     AudioSource backgroundMusicSource;
@@ -42,6 +44,9 @@ public class GameManger : MonoBehaviour
     private bool gameActive = true;
     private bool timerRunning = false; // Timer only starts when player moves
     public static bool isGameOver = false;
+    
+    [Header("Scene Settings")]
+    [SerializeField] private string gameOverSceneName = "GameOver";
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -71,6 +76,7 @@ public class GameManger : MonoBehaviour
         timerRunning = false;
         gameActive = true;
         isGameOver = false;
+        treesCut = 0; // Reset trees cut counter
         
         // Find timer text if not assigned
         if (timerText == null && timerTextTMP == null)
@@ -132,12 +138,20 @@ public class GameManger : MonoBehaviour
             {
                 currentTime = 0f;
                 timerRunning = false;
+                UpdateTimerDisplay();
+                
+                // Check win/lose condition
                 if (totalTrees > 0)
                 {
                     // Player lost - didn't cut all trees in time
                     GameOver(false);
                 }
-                UpdateTimerDisplay();
+                else
+                {
+                    // Player won - cut all trees before time ran out
+                    // (This case should be rare, as StartCutting usually handles win condition)
+                    GameOver(true);
+                }
                 return;
             }
         }
@@ -236,7 +250,7 @@ public class GameManger : MonoBehaviour
         if (!cuttablePlant.GetComponent<Plant>().isChopped)
         {
             totalTrees--;
-            MainMenuController.totalScore += 10;
+            treesCut++; // Increment trees cut counter
         }
         treeCountText.text = totalTrees.ToString();
         audioSource.Play();
@@ -284,6 +298,10 @@ public class GameManger : MonoBehaviour
     
     private void GameOver(bool won)
     {
+        // Prevent multiple calls
+        if (isGameOver)
+            return;
+            
         gameActive = false;
         isGameOver = true;
         
@@ -300,21 +318,59 @@ public class GameManger : MonoBehaviour
             playerController.enabled = false;
         }
         
-        // Show game over message
-        if (gameOverText != null)
+        // Calculate final score: trees cut × 100
+        MainMenuController.stage3TreesCut = treesCut;
+        MainMenuController.totalScore = treesCut * 100;
+        
+        // Log final score and win/lose status
+        string result = won ? "WIN" : "LOSE";
+        Debug.Log($"Game Over - {result}! Trees Cut: {treesCut}, Final Score: {MainMenuController.totalScore}");
+        
+        // Load Game Over scene instead of showing in-scene UI
+        if (!string.IsNullOrEmpty(gameOverSceneName))
         {
-            if (won)
+            Debug.Log($"Loading GameOver scene: {gameOverSceneName}");
+            // Small delay to ensure everything is processed
+            StartCoroutine(LoadGameOverSceneAfterDelay());
+        }
+        else
+        {
+            Debug.LogWarning("GameOver scene name is not set! Falling back to in-scene UI. Please set 'Game Over Scene Name' in the GameManger component.");
+            // Fallback to old UI display if scene name not set
+            if (gameOverText != null)
             {
-                gameOverText.text = "YOU WIN!";
+                if (won)
+                {
+                    gameOverText.text = "YOU WIN!";
+                }
+                else
+                {
+                    gameOverText.text = "YOU LOSE";
+                }
+                gameOverText.gameObject.SetActive(true);
             }
-            else
+            if (finalScoreText != null)
             {
-                gameOverText.text = "YOU LOSE";
+                finalScoreText.text = "Final Score: " + MainMenuController.totalScore.ToString();
+                finalScoreText.gameObject.SetActive(true);
             }
-            gameOverText.gameObject.SetActive(true);
-            Debug.Log("final score: " + MainMenuController.totalScore.ToString());
-            finalScoreText.text = "Final Score: " + MainMenuController.totalScore.ToString();
-            finalScoreText.gameObject.SetActive(true);
+        }
+    }
+    
+    IEnumerator LoadGameOverSceneAfterDelay()
+    {
+        // Small delay to ensure game state is saved
+        yield return new WaitForSeconds(0.5f);
+        
+        try
+        {
+            Debug.Log($"Attempting to load scene: {gameOverSceneName}");
+            SceneManager.LoadScene(gameOverSceneName);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Failed to load GameOver scene '{gameOverSceneName}': {e.Message}");
+            Debug.LogError("Make sure the scene is added to Build Settings (File > Build Settings > Add Open Scenes)");
         }
     }
 }
