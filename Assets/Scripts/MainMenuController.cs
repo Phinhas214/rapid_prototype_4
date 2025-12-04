@@ -6,6 +6,8 @@ public class MainMenuController : MonoBehaviour
 {
     [Header("Scene Settings")]
     [SerializeField] private string gameSceneName = "Stage-1";
+    private string stage2InstructionsName = "Stage2Instructions";
+    private string stage3InstructionsName = "Stage3Instructions";
     private string scene2Name = "Stage_2";
     private string scene3Name = "Stage 3";
     
@@ -20,6 +22,8 @@ public class MainMenuController : MonoBehaviour
     private bool isProcessing = false; // Prevent multiple clicks
 
     public static int totalScore = 0; // Static variable to hold total score across scenes
+    public static int stage1Score = 0; // Static variable to hold Stage 1 score (number of targets hit)
+    public static int stage2TreesWatered = 0; // Static variable to hold Stage 2 trees watered count
     
     void Start()
     {
@@ -102,15 +106,14 @@ public class MainMenuController : MonoBehaviour
         }
         else if(SceneManager.GetActiveScene().name == "Stage-1")
         {
-            // If currently in Stage 1 menu, load Stage 2 scene
-            SceneManager.LoadScene(scene2Name);
+            // If currently in Stage 1, load Stage 2 Instructions scene
+            SceneManager.LoadScene(stage2InstructionsName);
             yield break;
         }
         else if(SceneManager.GetActiveScene().name == "Stage_2")
         {
-            Debug.Log("loading stage 3");
-            // If currently in Stage 2 menu, load Stage 3 scene
-            SceneManager.LoadScene(scene3Name);
+            // If currently in Stage 2, load Stage 3 Instructions scene
+            SceneManager.LoadScene(stage3InstructionsName);
             yield break;
         }
 

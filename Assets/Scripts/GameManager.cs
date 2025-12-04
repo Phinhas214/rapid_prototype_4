@@ -21,6 +21,10 @@ public class GameManager : MonoBehaviour
     private Camera mainCamera;
     private UIManager uiManager;
 
+    [Header("Stage 1 References")]
+    [SerializeField] private BackgroundMusicPlayer backgroundMusicPlayer;
+    [SerializeField] private PlayerControllerStage1 playerControllerStage1;
+
 
     
     void Start()
@@ -32,6 +36,17 @@ public class GameManager : MonoBehaviour
         }
         
         uiManager = FindFirstObjectByType<UIManager>();
+
+        // Try to automatically find Stage 1 specific references if they are not assigned
+        if (backgroundMusicPlayer == null)
+        {
+            backgroundMusicPlayer = FindFirstObjectByType<BackgroundMusicPlayer>();
+        }
+
+        if (playerControllerStage1 == null)
+        {
+            playerControllerStage1 = FindFirstObjectByType<PlayerControllerStage1>();
+        }
         
         StartGame();
     }
@@ -114,7 +129,22 @@ public class GameManager : MonoBehaviour
     void EndGame()
     {
         gameActive = false;
-        
+
+        // Save Stage 1 score before transitioning
+        MainMenuController.stage1Score = score;
+
+        // Stop background music when the game ends (Stage 1)
+        if (backgroundMusicPlayer != null && backgroundMusicPlayer.IsPlaying())
+        {
+            backgroundMusicPlayer.StopMusic();
+        }
+
+        // Disable player controls when the game ends (Stage 1)
+        if (playerControllerStage1 != null)
+        {
+            playerControllerStage1.enabled = false;
+        }
+
         if (uiManager != null)
         {
             uiManager.ShowGameOver(score);

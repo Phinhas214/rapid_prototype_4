@@ -1,20 +1,22 @@
 using UnityEngine;
 using TMPro;
-using System.Threading;
 
 public class WateringTimer : MonoBehaviour
 {
     public float timeRemaining = 30f;
     public TextMeshProUGUI timerText;
     public PlayerController playerController;
-    public TextMeshProUGUI instructionText; // ⭐ New instruction UI text
 
     private bool timerRunning = false;
+    private bool timeExpired = false;
+    private Stage2GameManager gameManager;
 
     void Start()
     {
         timerText.text = Mathf.Ceil(timeRemaining).ToString();
-        instructionText.gameObject.SetActive(true); // Show instructions at start
+        
+        // Find Stage2GameManager
+        gameManager = FindFirstObjectByType<Stage2GameManager>();
     }
 
     bool startTimeCondition()
@@ -29,11 +31,10 @@ public class WateringTimer : MonoBehaviour
 
     void Update()
     {
-        // First Space press starts timer AND hides instructions
+        // First input starts timer
         if (startTimeCondition() == true)
         {
             timerRunning = true;
-            instructionText.gameObject.SetActive(false);
         }
 
         if (timerRunning)
@@ -48,11 +49,14 @@ public class WateringTimer : MonoBehaviour
                 timeRemaining = 0f;
                 timerRunning = false;
                 playerController.canWater = false;
+                
+                // Notify game manager that time ran out (only once)
+                if (!timeExpired && gameManager != null)
+                {
+                    timeExpired = true;
+                    gameManager.OnTimerExpired();
+                }
             }
-        }
-        else if (timeRemaining <= 0f)
-        {
-            //Time.timeScale = 0f;
         }
     }
 }

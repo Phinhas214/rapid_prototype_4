@@ -11,9 +11,6 @@ public class Stage3PlayerController : MonoBehaviour
     [SerializeField] private GameManger gameManger;
     private SpriteRenderer spriteRenderer;
     [SerializeField] private Sprite[] playerSprites;
-    
-    [Header("Instruction UI")]
-    [SerializeField] private GameObject instructionText; // Assign in inspector, or will be found by name
 
     private PlayerMovementStage3 controls;
     private bool hasMadeFirstMove = false;
@@ -38,16 +35,6 @@ public class Stage3PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         controls.Main.Movement.performed += ctx => Move(ctx.ReadValue<Vector2>());
         controls.Main.Cut.performed += ctx => Cut();
-        
-        // Find instruction text if not assigned
-        if (instructionText == null)
-        {
-            GameObject foundInstruction = GameObject.Find("Instruction");
-            if (foundInstruction != null)
-            {
-                instructionText = foundInstruction;
-            }
-        }
     }
 
     private void Move(Vector2 direction)
@@ -81,11 +68,16 @@ public class Stage3PlayerController : MonoBehaviour
         {
             transform.position += (Vector3)direction;
             
-            // Hide instruction text on first successful move
+            // Start timer on first successful move
             if (!hasMadeFirstMove)
             {
                 hasMadeFirstMove = true;
-                HideInstructionText();
+                
+                // Start the timer when player makes first move
+                if (gameManger != null)
+                {
+                    gameManger.StartTimer();
+                }
             }
         }
     }
@@ -114,13 +106,4 @@ public class Stage3PlayerController : MonoBehaviour
         }
         return true;
     }
-    
-    private void HideInstructionText()
-    {
-        if (instructionText != null)
-        {
-            instructionText.SetActive(false);
-        }
-    }
-
 }

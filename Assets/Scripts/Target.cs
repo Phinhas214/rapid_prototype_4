@@ -6,7 +6,7 @@ public class Target : MonoBehaviour
     [SerializeField] private float scrollSpeed = 3f;
     
     [Header("Scoring")]
-    [SerializeField] private int pointsValue = 10;
+    [SerializeField] private int pointsValue = 1;
     
     private GameManager gameManager;
     private bool hasBeenHit = false;

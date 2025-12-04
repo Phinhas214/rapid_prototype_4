@@ -40,6 +40,7 @@ public class GameManger : MonoBehaviour
     [SerializeField] private float gameTimeLimit = 30f; // 30 seconds
     private float currentTime;
     private bool gameActive = true;
+    private bool timerRunning = false; // Timer only starts when player moves
     public static bool isGameOver = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -50,13 +51,24 @@ public class GameManger : MonoBehaviour
         // Setup background music
         SetupBackgroundMusic();
         
-        totalTrees = plants.Length;
+        // Initialize plants (will be set by PlantSpawner if dynamic spawning is used)
+        if (plants != null && plants.Length > 0)
+        {
+            totalTrees = plants.Length;
+        }
+        else
+        {
+            // Plants will be set by PlantSpawner
+            totalTrees = 0;
+        }
+        
         AddPlants();
         SetCuttingUIPrefab(cuttingUIPrefab);
         treeCountText.text = totalTrees.ToString();
         
-        // Initialize timer
+        // Initialize timer (not running yet - will start on first move)
         currentTime = gameTimeLimit;
+        timerRunning = false;
         gameActive = true;
         isGameOver = false;
         
@@ -110,33 +122,38 @@ public class GameManger : MonoBehaviour
         if (!gameActive)
             return;
 
-        // Update timer
-        currentTime -= Time.deltaTime;
+        // Update timer only if it's running
+        if (timerRunning)
+        {
+            currentTime -= Time.deltaTime;
+            
+            // Check if time ran out
+            if (currentTime <= 0f)
+            {
+                currentTime = 0f;
+                timerRunning = false;
+                if (totalTrees > 0)
+                {
+                    // Player lost - didn't cut all trees in time
+                    GameOver(false);
+                }
+                UpdateTimerDisplay();
+                return;
+            }
+        }
         
         // Update timer display
         UpdateTimerDisplay();
-        
-        // Check if time ran out
-        if (currentTime <= 0f)
-        {
-            currentTime = 0f;
-            if (totalTrees > 0)
-            {
-                // Player lost - didn't cut all trees in time
-                GameOver(false);
-            }
-            return;
-        }
 
         canCut = false;
         cuttablePlant = null;
 
-        // Don't process plant interactions if game is over
-        if (!isGameOver)
+        // Don't process plant interactions if game is over or plants array is not ready
+        if (!isGameOver && plants != null && plants.Length > 0)
         {
             for(int i = 0; i < plants.Length; i++)
             {
-                if(IsPlantCloseToPlayer(plants[i].transform))
+                if(plants[i] != null && IsPlantCloseToPlayer(plants[i].transform))
                 {
                     // set values so the player controller knows that it can cut
                     // set up cut option popup
@@ -174,8 +191,20 @@ public class GameManger : MonoBehaviour
 
     void AddPlants() 
     {
-        // Get number of plants from other stage and plant them
-        //TODO : implement when other stages have figured out how to tranfer that information over 
+        // Plants are now spawned dynamically by PlantSpawner
+        // This method is kept for backward compatibility but does nothing
+        // The PlantSpawner will call SetPlantsArray() to update the plants array
+    }
+    
+    public void SetPlantsArray(GameObject[] newPlants)
+    {
+        plants = newPlants;
+        if (plants != null)
+        {
+            totalTrees = plants.Length;
+            treeCountText.text = totalTrees.ToString();
+            Debug.Log($"GameManger: Plants array updated with {plants.Length} plants.");
+        }
     }
 
     bool IsPlantCloseToPlayer(Transform plantTransform)
@@ -228,6 +257,15 @@ public class GameManger : MonoBehaviour
     public void RemoveCollisionTileAt(Vector3Int cellPosition)
     {
         collisionTilemap.SetTile(cellPosition, null);
+    }
+    
+    public void StartTimer()
+    {
+        if (!timerRunning && gameActive)
+        {
+            timerRunning = true;
+            Debug.Log("Stage 3 Timer started!");
+        }
     }
     
     private void UpdateTimerDisplay()

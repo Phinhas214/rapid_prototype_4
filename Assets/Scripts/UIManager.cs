@@ -77,7 +77,7 @@ public class UIManager : MonoBehaviour
         
         if (finalScoreText != null)
         {
-            finalScoreText.text = "Final Score: " + finalScore;
+            finalScoreText.text = "Seeds Planted: " + finalScore;
         }
     }
     
