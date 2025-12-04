@@ -8723,12 +8723,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 454427621}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.02, y: 4.2, z: -2.7043939}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -601.3023, y: -293.32983, z: -4.2949615}
+  m_LocalScale: {x: 2.382213, y: 2.382213, z: 1.588142}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1402146475}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &943777587
 GameObject:
@@ -8880,6 +8880,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a20efc7ba479406d9c9622d57a05b75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraFollow
+  iconTarget: {fileID: 454427623}
   target: {fileID: 1324519879}
   offset: {x: 0, y: 0, z: 0}
   smoothSpeed: 0.125
@@ -9450,6 +9451,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 454427623}
   - {fileID: 1030524922}
   - {fileID: 1394180071}
   - {fileID: 428689772}
@@ -15547,5 +15549,4 @@ SceneRoots:
   - {fileID: 1324519879}
   - {fileID: 1402146475}
   - {fileID: 186563873}
-  - {fileID: 454427623}
   - {fileID: 1391837731}
