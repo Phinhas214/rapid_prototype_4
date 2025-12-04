@@ -267,7 +267,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1863998597}
         m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
         m_MethodName: StartGame
         m_Mode: 1
@@ -17074,6 +17074,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1833281478}
   m_CullTransparentMesh: 1
+--- !u!1 &1863998596
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1863998598}
+  - component: {fileID: 1863998597}
+  m_Layer: 0
+  m_Name: SceneManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1863998597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863998596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b9937a4f02156d46968541a46b5508b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MainMenuController
+  gameSceneName: Stage-1
+  buttonClickSound: {fileID: 8300000, guid: da5b73bb786b0d347a438b7d89306035, type: 3}
+  backgroundMusic: {fileID: 0}
+  soundDelay: 0.5
+  musicVolume: 0.5
+--- !u!4 &1863998598
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863998596}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 304.92215, y: 333.98517, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1880422839 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2194634052423523236, guid: ae0cf6b65abb3cf45abd2d7126856db0, type: 3}
@@ -17915,3 +17964,4 @@ SceneRoots:
   - {fileID: 2094331238}
   - {fileID: 1763660706}
   - {fileID: 642586854}
+  - {fileID: 1863998598}
