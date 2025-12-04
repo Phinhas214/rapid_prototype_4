@@ -18,6 +18,8 @@ public class MainMenuController : MonoBehaviour
     private AudioSource audioSource;
     private AudioSource musicSource;
     private bool isProcessing = false; // Prevent multiple clicks
+
+    public static int totalScore = 0; // Static variable to hold total score across scenes
     
     void Start()
     {
@@ -83,7 +85,7 @@ public class MainMenuController : MonoBehaviour
     {
         // Wait for sound to play
         yield return new WaitForSeconds(soundDelay);
-        
+
         if(SceneManager.GetActiveScene().name == "MainMenu")
         {
             // Load the game scene
@@ -106,6 +108,7 @@ public class MainMenuController : MonoBehaviour
         }
         else if(SceneManager.GetActiveScene().name == "Stage_2")
         {
+            Debug.Log("loading stage 3");
             // If currently in Stage 2 menu, load Stage 3 scene
             SceneManager.LoadScene(scene3Name);
             yield break;

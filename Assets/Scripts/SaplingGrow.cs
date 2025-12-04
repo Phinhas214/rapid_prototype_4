@@ -59,6 +59,7 @@ public class SaplingGrow : MonoBehaviour
             playerController.treeCount++;
             playerController.treeScoreText.text =
                 "Trees Watered: " + playerController.treeCount;
+                MainMenuController.totalScore += 10;
         }
     }
 

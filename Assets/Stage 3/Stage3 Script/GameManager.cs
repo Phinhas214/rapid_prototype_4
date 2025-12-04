@@ -24,6 +24,7 @@ public class GameManger : MonoBehaviour
     [SerializeField] private Text treeCountText;
     [SerializeField] private Text timerText; // Legacy UI Text component
     [SerializeField] private TextMeshProUGUI timerTextTMP; // TextMeshPro component (alternative)
+    [SerializeField] private Text finalScoreText;
     private int totalTrees;
     
     AudioSource audioSource;
@@ -105,6 +106,7 @@ public class GameManger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (!gameActive)
             return;
 
@@ -194,6 +196,8 @@ public class GameManger : MonoBehaviour
         Destroy(UIPopUpGO);
     }
 
+    
+
     public void StartCutting(Transform playerTransform)
     {
         Vector3Int CellPos = collisionTilemap.WorldToCell(cuttablePlant.transform.position);
@@ -203,6 +207,7 @@ public class GameManger : MonoBehaviour
         if (!cuttablePlant.GetComponent<Plant>().isChopped)
         {
             totalTrees--;
+            MainMenuController.totalScore += 10;
         }
         treeCountText.text = totalTrees.ToString();
         audioSource.Play();
@@ -269,6 +274,9 @@ public class GameManger : MonoBehaviour
                 gameOverText.text = "YOU LOSE";
             }
             gameOverText.gameObject.SetActive(true);
+            Debug.Log("final score: " + MainMenuController.totalScore.ToString());
+            finalScoreText.text = "Final Score: " + MainMenuController.totalScore.ToString();
+            finalScoreText.gameObject.SetActive(true);
         }
     }
 }
